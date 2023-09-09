@@ -1,5 +1,5 @@
 //
-//  ReminderListViewControllerCollectionViewController.swift
+//  ReminderListViewController.swift
 //  Today
 //
 //  Created by Антон Адамсон on 09.09.2023.
@@ -7,16 +7,7 @@
 
 import UIKit
 
-class ReminderListViewControllerCollectionViewController: UICollectionViewController {
-
-    /**
-     Добавим псевдоним типа для разнояемого источника данных.
-     */
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
-    /**
-     Добавим псевдоним типа для разновидного источника данных.
-     */
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, String>
+class ReminderListViewController: UICollectionViewController {
     
     var dataSource: DataSource!
     
@@ -29,13 +20,7 @@ class ReminderListViewControllerCollectionViewController: UICollectionViewContro
         /**
          Регистрация ячейки определяет, как настроить содержимое и внешний вид ячейки.
          */
-        let cellRegistration = UICollectionView.CellRegistration {
-            (cell: UICollectionViewListCell, indexPath: IndexPath, itemIdentifier: String) in
-            let reminder = Reminder.sampleData[indexPath.item]
-            var contentConfiguration = cell.defaultContentConfiguration()
-            contentConfiguration.text = reminder.title
-            cell.contentConfiguration = contentConfiguration
-        }
+        let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
         
         dataSource = DataSource(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: String) in
