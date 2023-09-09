@@ -13,6 +13,10 @@ class ReminderListViewControllerCollectionViewController: UICollectionViewContro
      Добавим псевдоним типа для разнояемого источника данных.
      */
     typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
+    /**
+     Добавим псевдоним типа для разновидного источника данных.
+     */
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, String>
     
     var dataSource: DataSource!
     
@@ -38,7 +42,23 @@ class ReminderListViewControllerCollectionViewController: UICollectionViewContro
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration, for: indexPath, item: itemIdentifier)
         }
+        
+        var snapshot = Snapshot()
+        snapshot.appendSections([0])
+        /* long version
+        var reminderTitles = [String]()
+        for reminder in Reminder.sampleData {
+            reminderTitles.append(reminder.title)
+        }
+        snapshot.appendItems(reminderTitles)
+         */
+        snapshot.appendItems(Reminder.sampleData.map { $0.title} )
+        dataSource.apply(snapshot)
+        
+        // Назначим источник данных представленному виду коллекции.
+        collectionView.dataSource = dataSource
     }
+    
     /**
      функция создает новую переменную конфигурации списка со сгруппированным внешним видом.
      */
