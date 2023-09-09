@@ -10,6 +10,7 @@ import UIKit
 class ReminderListViewController: UICollectionViewController {
     
     var dataSource: DataSource!
+    var reminders: [Reminder] = Reminder.sampleData
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,22 +24,12 @@ class ReminderListViewController: UICollectionViewController {
         let cellRegistration = UICollectionView.CellRegistration(handler: cellRegistrationHandler)
         
         dataSource = DataSource(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: String) in
+            (collectionView: UICollectionView, indexPath: IndexPath, itemIdentifier: Reminder.ID) in
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration, for: indexPath, item: itemIdentifier)
         }
         
-        var snapshot = Snapshot()
-        snapshot.appendSections([0])
-        /* long version
-        var reminderTitles = [String]()
-        for reminder in Reminder.sampleData {
-            reminderTitles.append(reminder.title)
-        }
-        snapshot.appendItems(reminderTitles)
-         */
-        snapshot.appendItems(Reminder.sampleData.map { $0.title} )
-        dataSource.apply(snapshot)
+        updateSnapshot()
         
         // Назначим источник данных представленному виду коллекции.
         collectionView.dataSource = dataSource
